@@ -90,7 +90,7 @@ public class HorseTest {
     }
 
     @Test
-    public void testGetSpeed(){
+    public void testGetSpeed() {
         double expectedSpeed = 999.0;
         Horse horse = new Horse("nameHorse", expectedSpeed, 1.0);
 
@@ -98,18 +98,31 @@ public class HorseTest {
     }
 
     @Test
-    public void testGetDistance(){
+    public void testGetDistance() {
         Horse horse = new Horse("nameHorse", 1.0);
 
         assertEquals(0, horse.getDistance());
     }
 
     @Test
-    void testMoveUsesGetRandom(){
-       try (MockedStatic<Horse> mockedStatic = mockStatic(Horse.class)) {
-           new Horse("nameHorse", 35, 953).move();
+    void testMoveUsesGetRandom() {
+        try (MockedStatic<Horse> mockedStatic = mockStatic(Horse.class)) {
+            new Horse("nameHorse", 35, 953).move();
 
-           mockedStatic.verify(() -> Horse.getRandomDouble(0.2, 0.9));
-       }
+            mockedStatic.verify(() -> Horse.getRandomDouble(0.2, 0.9));
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(doubles = {0.1, 0.2, 0.5, 0.9, 999.999, 0.0})
+    void testMove(double random) {
+        try (MockedStatic<Horse> mockedStatic = mockStatic(Horse.class)) {
+            Horse horse = new Horse("nameHorse", 35, 953);
+            mockedStatic.when(() -> Horse.getRandomDouble(0.2, 0.9)).thenReturn(random);
+
+            horse.move();
+
+            assertEquals(953 + 35 * random, horse.getDistance());
+        }
     }
 }
