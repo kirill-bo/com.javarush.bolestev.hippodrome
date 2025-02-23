@@ -3,8 +3,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -48,5 +47,17 @@ public class HippodromeTest {
         for (Horse horse : horses) {
             verify(horse).move();
         }
+    }
+
+    @Test
+    public void testGetWinner() {
+      Horse horse1 = new Horse("Horse 1", 1.0+1, 1.0+1);
+      Horse horse2 = new Horse("Horse 2", 1.0+2, 1.0+2);
+      Horse horse3 = new Horse("Horse 3", 1.0+3, 1.0+3);
+      Horse horse4 = new Horse("Horse 4", 1.0+4, 1.0+4);
+      Horse horse5 = new Horse("Horse 5", 1.0+5, 1.0+5);
+
+      Hippodrome hippodrome = new Hippodrome(List.of(horse1, horse2, horse3, horse4, horse5));
+      assertSame(horse5, hippodrome.getWinner());
     }
 }
